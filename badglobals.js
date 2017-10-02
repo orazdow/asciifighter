@@ -12,8 +12,8 @@ straight_stop_down
 straight_stop_down_up 
 straight_stop_down_stop_up 
 straight_stop_down_up_stop_up 
-straight_down_up_stop_up -
-straight_down_up_stop_down -
+straight_down_up_stop_up 
+straight_down_up_stop_down 
 down 
 down_up 
 down_shallowdown 
@@ -42,6 +42,13 @@ var bchars_c = ['n','%','n',
 				'%','n','n',
 				'n','%','n'];
 
+function globalmv(dir, dir2, dir3, dir4){
+
+}
+
+function globalmvCb(dir){
+
+}
 
 /* move routines */
 
