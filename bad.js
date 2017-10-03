@@ -23,14 +23,14 @@ c:
 function Bad(x, y, look, movecb, shootcb) {
 	
 	
-	this.y = 5; // mid start pos
+	this.y = 10; // mid start pos
 	this.ydir = 1; // -1 reverses ydir
-	this.xoffset = 10;
-	this.delay = 0;
+	this.xoffset = 0;
+	this.delay = 10;
 	this.spd = 1; //0 = slower, 1 = norm, 2 = faster etc
 	this.arr = bchars_a;
-	this.movecb = straight_down_stop_up;
-	this.shootcb = shoot1;
+	this.movecb = straight_stop_down_stop_up;
+	this.shootcb = shoot_15_4;
 
 
 	this.splode = false;

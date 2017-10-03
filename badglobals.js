@@ -42,13 +42,52 @@ var bchars_c = ['n','%','n',
 				'%','n','n',
 				'n','%','n'];
 
-function globalmv(dir, dir2, dir3, dir4){
+// hard coded preset funcs faster...
+// not using for now
+/*
+// ['straight', 'down', 'stop', 'up']
 
+function globalmvCb(moves){
+	this.mcnt++; 
+	if(this.mcnt <= 0){return;}
+	if(this.mcnt%16 === 0){this.mode++;}
+	for (var i = 0; i < moves.length; i++){
+		if(this.mode === i){
+			move[moves[i]](this);
+			return;
+		}
+	}
+	if(this.mode >= moves.length){
+		move[moves[moves.length-1]](this);
+	}
 }
 
-function globalmvCb(dir){
+var move = {
+	'straight' : function(t){
+		t.x -= speed+t.spd;
+	},
+	'down' : function(t){
+		t.x -= speed+t.spd;
+		if(t.mcnt%2 == 0){ t.y += t.ycoef; }
+	},
+	'up' : function(t){
+		t.x -= speed+t.spd;
+		if(t.mcnt%2 == 0){ t.y -= t.ycoef; }
+	},
+	'stop' : function(t){
 
-}
+	},
+	'shallowup' : function(t){
+		t.x -= speed+t.spd;
+		if(t.mcnt%3 == 0){ t.y -= 0.5*t.ycoef; }
+	},
+	'shallowdown' : function(t){
+		t.x -= speed+t.spd;
+		if(t.mcnt%3 == 0){ t.y += 0.5*t.ycoef; }
+	},
+};
+
+*/
 
 /* move routines */
 
@@ -377,6 +416,25 @@ function down_straight_up_stop_up(){
 
 function shoot1(){
 	bullets.push(createBullet(this.x-1, this.y, 'left'));
+}
+
+function shoot_9(){
+	if(this.mcnt%9 == 0){
+		bullets.push(createBullet(this.x-1, this.y, 'left'));
+	}
+}
+
+// function shoot_15_4(){
+// 	if(this.mcnt%15 == 0 || this.mcnt%15 == 1 || this.mcnt%15 == 2 || this.mcnt%15 == 3){
+// 		bullets.push(createBullet(this.x-1, this.y, 'left'));
+// 	}
+// }
+
+function shoot_15_4(){
+	if(this.mode == 1 || this.mode == 3)
+	if(this.mcnt%40 > 5){
+		bullets.push(createBullet(this.x-1, this.y, 'left'));		
+	}
 }
 
 

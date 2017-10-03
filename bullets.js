@@ -14,6 +14,7 @@ function createBullet(_x, _y, _routine) {
 	   spd : 3,
 	   routine : _routine, 
 	   remove : false, 
+	   char : '$',
 
 	   move : function(){
 	   		switch (Bullet.routine){
@@ -46,6 +47,20 @@ function createBullet(_x, _y, _routine) {
 			          Bullet.split(); 
 			        }
 	   			break;
+
+	   			case 'dup2':
+					Bullet.cnt++;
+					Bullet.x -= Bullet.spd;
+					//if(Bullet.cnt % 3 == 0)
+						Bullet.y -= 2;  
+	   			break;
+
+				case 'ddown2':
+					Bullet.cnt++;
+					Bullet.x -= Bullet.spd;
+					//if(Bullet.cnt % 3 == 0)
+						Bullet.y += 2;  
+	   			break;
 	   		}
 	   },
 	   offScreen : function(){
@@ -58,7 +73,7 @@ function createBullet(_x, _y, _routine) {
 	      else{ return false; }
 	   },
 	   check : function (x, y) {
-	     if(x ==Bullet.x && y == Bullet.y){
+	     if(x === Bullet.x && y === Bullet.y){
 	      return true;
 	    } else {return false;}
 	   },
