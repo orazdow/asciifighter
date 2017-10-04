@@ -51,7 +51,7 @@ function createBullet(_x, _y, _routine, _spd) {
 	   			case 'bomb':
 	   				Bullet.cnt++;
 	   				Bullet.x += 2;
-	   				if(Bullet.cnt === 20){
+	   				if(Bullet.cnt === 13){
 	   					createBomb(Bullet.x, Bullet.y);
 	   					Bullet.remove = true;
 	   				}

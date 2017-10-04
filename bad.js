@@ -63,15 +63,15 @@ function Bad(x, y) {
 
 	this.shootFunc = function(interval, num, stages){
 		if(this.x < screenW){
-			if(stages){
+			if(!stages){
+				if(this.mcnt%interval < num)// || this.mcnt === 1) //immediate shoot 
+					bullets.push(createBullet(this.x-1, this.y, this.bulletrtn, this.bspd, this.bulletrtn, this.bchar));
+			}else{
 				if(this.mode === 0 && stages.s0 || this.mode === 1 && stages.s1 || this.mode === 2 && stages.s2 
 					|| this.mode === 3 && stages.s3 || this.mode === 4 && stages.s4){
 					if(this.mcnt%interval < num)
 						bullets.push(createBullet(this.x-1, this.y, this.bulletrtn, this.bspd, this.bulletrtn, this.bchar));
 				}
-			}else{
-				if(this.mcnt%interval < num)// || this.mcnt === 1) //immediate shoot 
-					bullets.push(createBullet(this.x-1, this.y, this.bulletrtn, this.bspd, this.bulletrtn, this.bchar));
 			}
 		}
 	}
