@@ -20,17 +20,25 @@ c:
  <<>
   */
 
-function Bad(x, y, look, movecb, shootcb) {
+function Bad(x, y) {
 	
 	
 	this.y = 10; // mid start pos
 	this.ydir = 1; // -1 reverses ydir
-	this.xoffset = 0;
-	this.delay = 10;
+	this.xoffset = 10;
+	this.delay = 0;
 	this.spd = 1; //0 = slower, 1 = norm, 2 = faster etc
 	this.arr = bchars_a;
 	this.movecb = straight_stop_down_stop_up;
-	this.shootcb = shoot_15_4;
+//	this.movecb = globalmvCb;
+//	this.moves = ['straight', 'stop', 'down', 'stop', 'up'];
+	
+	this.bulletrtn = 'left';
+	this.s_interval = 9;
+	this.s_num = 1;
+	this.stages = null; // { s0: 0, s1: 1, s2: 0, s3: 1, s4: 0 }
+	this.bchar = '$';
+	this.bspd = 3;
 
 
 	this.splode = false;
@@ -45,11 +53,27 @@ function Bad(x, y, look, movecb, shootcb) {
 	this.mlen = 16; // not using
 
 	this.move = function(){
+		// this.movecb(this.moves);
 		this.movecb();
 	}
 
 	this.shoot = function(){
-		this.shootcb();
+		this.shootFunc(this.s_interval, this.s_num, this.stages);
+	}
+
+	this.shootFunc = function(interval, num, stages){
+		if(this.x < screenW){
+			if(stages){
+				if(this.mode === 0 && stages.s0 || this.mode === 1 && stages.s1 || this.mode === 2 && stages.s2 
+					|| this.mode === 3 && stages.s3 || this.mode === 4 && stages.s4){
+					if(this.mcnt%interval < num)
+						bullets.push(createBullet(this.x-1, this.y, this.bulletrtn, this.bspd, this.bulletrtn, this.bchar));
+				}
+			}else{
+				if(this.mcnt%interval < num)// || this.mcnt === 1) //immediate shoot 
+					bullets.push(createBullet(this.x-1, this.y, this.bulletrtn, this.bspd, this.bulletrtn, this.bchar));
+			}
+		}
 	}
 
 	this.explode = function(){

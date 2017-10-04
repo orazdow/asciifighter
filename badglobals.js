@@ -42,11 +42,12 @@ var bchars_c = ['n','%','n',
 				'%','n','n',
 				'n','%','n'];
 
-// hard coded preset funcs faster...
 // not using for now
-/*
+// hard coded preset funcs faster.....
+
 // ['straight', 'down', 'stop', 'up']
 
+/*
 function globalmvCb(moves){
 	this.mcnt++; 
 	if(this.mcnt <= 0){return;}
@@ -86,8 +87,8 @@ var move = {
 		if(t.mcnt%3 == 0){ t.y += 0.5*t.ycoef; }
 	},
 };
-
 */
+
 
 /* move routines */
 
@@ -414,27 +415,19 @@ function down_straight_up_stop_up(){
 
 /* shoot routines */
 
-function shoot1(){
-	bullets.push(createBullet(this.x-1, this.y, 'left'));
-}
+// function shoot1(){
+// 	bullets.push(createBullet(this.x-1, this.y, 'left'));
+// }
 
-function shoot_9(){
-	if(this.mcnt%9 == 0){
-		bullets.push(createBullet(this.x-1, this.y, 'left'));
-	}
-}
-
-// function shoot_15_4(){
-// 	if(this.mcnt%15 == 0 || this.mcnt%15 == 1 || this.mcnt%15 == 2 || this.mcnt%15 == 3){
+// function shoot_9(){
+// 	if(this.mcnt%9 == 0){
 // 		bullets.push(createBullet(this.x-1, this.y, 'left'));
 // 	}
 // }
 
-function shoot_15_4(){
-	if(this.mode == 1 || this.mode == 3)
-	if(this.mcnt%40 > 5){
-		bullets.push(createBullet(this.x-1, this.y, 'left'));		
-	}
-}
-
-
+// function shoot_15_4(){
+// 	if(this.mode == 1 || this.mode == 3)
+// 	if(this.mcnt%20 < 1){
+// 		bullets.push(createBullet(this.x-1, this.y, 'left'));		
+// 	}
+// }

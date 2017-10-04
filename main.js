@@ -21,14 +21,14 @@ const ship = new Ship();
 var bullets = [];
 var bads = [];
 
-// var rec = false;
-// var perf = [];
-// var average = 0;
-// function avg(arr){
-// 	return arr.reduce((a,b)=>{
-// 		return a + b;
-// 	}) / arr.length;
-// }
+var rec = false;
+var perf = [];
+var average = 0;
+function avg(arr){
+	return arr.reduce((a,b)=>{
+		return a + b;
+	}) / arr.length;
+}
 
 bads.push(new Bad());
 
@@ -215,7 +215,7 @@ function drawAscii(arr, disp){
 	
 	for(var y = 0; y < 50; y++) { 
 		 for(var x = 0; x < 100; x++) {
-       // let t1 = performance.now();
+        // let t1 = performance.now();
 	        if((c = ship.getChar(x,y)) != 'n'){
 	        	str += c;
 	        }

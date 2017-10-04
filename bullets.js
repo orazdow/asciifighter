@@ -1,5 +1,5 @@
 
-function createBullet(_x, _y, _routine) {
+function createBullet(_x, _y, _routine, _spd) {
 	var tr = false;
 
 	if(_routine == 'right'){
@@ -11,7 +11,7 @@ function createBullet(_x, _y, _routine) {
 	   y : _y,
 	   cnt : 0,
 	   toright : tr,
-	   spd : 3,
+	   spd : _spd,
 	   routine : _routine, 
 	   remove : false, 
 	   char : '$',
