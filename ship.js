@@ -47,9 +47,10 @@ function Ship(){
     	this.y++;
     }
 
-	this.shoot = function() { console.log('yooo');
+	this.shoot = function() { 
 		if(shootType == 1){
-		  bullets.push( createBullet(this.x, this.y, 'right', 3, '$') );
+		  // bullets.push( createBullet(this.x, this.y, 'right', 3, '$') );
+		  bullets.push( createBullet(this.x, this.y, 'bomb', 3, '$') );
 		}
 	}
 

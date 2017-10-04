@@ -34,7 +34,7 @@ function avg(arr){
 
 bads.push(new Bad());
 
-window.setInterval(function(){ drawAscii(bkgd, display); }, 50);
+window.setInterval(function(){ drawAscii(bkgd, display); }, 45);
 
 
 document.addEventListener('keydown', function(event) {
@@ -205,20 +205,22 @@ function bads_shoot(){
 
 function checkBombs(x, y){
 	for(var i = 0; i < bombs.length; i++){
-	let a = 0.1*(((bombs[i].x-x)*0.5)**2+(bombs[i].y-y)**2);
+		
+		let a = 0.1*(((bombs[i].x-x)*0.5)**2+(bombs[i].y-y)**2);
 
-	if((a-bombs[i].n > -5 &&  a-bombs[i].n < -2) || (a-bombs[i].n > 3 &&  a-bombs[i].n < 4) || (a-bombs[i].n > 8 &&  a-bombs[i].n < 10)){
-		return true;
-	}
+		if((a-bombs[i].n > -5 &&  a-bombs[i].n < -2) || (a-bombs[i].n > 3 &&  a-bombs[i].n < 4) 
+			|| (a-bombs[i].n > 8 &&  a-bombs[i].n < 10)){
+			return true;
+		}
 	}
     return false; 
 }
 
-function moveBombs(){
-	bomb = bombs.length;
-	for (var i = bombs.length - 1; i >= 0; i--) {
+function moveBombs(){	
+	for (var i = bombs.length-1; i >= 0; i--) {
 		bombs[i].n+=3;
 		if(bombs[i].n > 290){ bombs.splice(i,1); }
+		bomb = bombs.length;
 	}
 }
 
@@ -237,7 +239,7 @@ function drawAscii(arr, disp){
 	moveBombs();
 	if(badShoot){ bads_shoot(); } // <<<<< will need to be replaced
 	if(shoot){if(shootType === 1){ ship.shoot(); }else{ laser(); }}
-    //n = (n+3)%300;
+
 	for(var y = 0; y < 50; y++) { 
 		 for(var x = 0; x < 100; x++) {
         // let t1 = performance.now();
