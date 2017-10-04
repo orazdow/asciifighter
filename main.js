@@ -12,6 +12,7 @@ var shoot = false;
 var shootType = 1;  // 0 == beam, 1 == bullets
 var movebads = false;
 var badShoot = false;
+var bomb = false;
 
 var screenW = 100;
 var screenH = 50;
@@ -20,6 +21,7 @@ const ship = new Ship();
 
 var bullets = [];
 var bads = [];
+var bombs = [];
 
 var rec = false;
 var perf = [];
@@ -201,6 +203,28 @@ function bads_shoot(){
 	}
 }
 
+function checkBombs(x, y){
+	for(var i = 0; i < bombs.length; i++){
+	let a = 0.1*(((bombs[i].x-x)*0.5)**2+(bombs[i].y-y)**2);
+
+	if((a-bombs[i].n > -5 &&  a-bombs[i].n < -2) || (a-bombs[i].n > 3 &&  a-bombs[i].n < 4) || (a-bombs[i].n > 8 &&  a-bombs[i].n < 10)){
+		return true;
+	}
+	}
+    return false; 
+}
+
+function moveBombs(){
+	bomb = bombs.length;
+	for (var i = bombs.length - 1; i >= 0; i--) {
+		bombs[i].n+=3;
+		if(bombs[i].n > 290){ bombs.splice(i,1); }
+	}
+}
+
+function createBomb(_x,_y){
+	bombs.push({x: _x, y: _y, n: 0});
+}
 
 function drawAscii(arr, disp){
 
@@ -210,9 +234,10 @@ function drawAscii(arr, disp){
 	moveShip();
 	moveBads();
 	moveBullets();
+	moveBombs();
 	if(badShoot){ bads_shoot(); } // <<<<< will need to be replaced
-	if(shoot){if(shootType == 1){ ship.shoot(); }else{ laser(); }}
-	
+	if(shoot){if(shootType === 1){ ship.shoot(); }else{ laser(); }}
+    //n = (n+3)%300;
 	for(var y = 0; y < 50; y++) { 
 		 for(var x = 0; x < 100; x++) {
         // let t1 = performance.now();
@@ -225,8 +250,11 @@ function drawAscii(arr, disp){
 	  		else if((c = checkBullets(x,y))){
 	 			str += c
 			}
-			else if (shoot && shootType == 0 && y == ship.y && x > 4){ 
+			else if (shoot && shootType === 0 && y === ship.y && x > 4){ 
 				str += '-';
+			}
+			else if(bomb && checkBombs(x,y)){
+				str += '&';
 			}
 	        else{
 	   	    str += arr[Math.round((noise.perlin2(a+x/60, y/30)+1)*0.5*arr.length)]; 
