@@ -9,7 +9,7 @@ var speed = 1;
 
 var goup = false, godown = false;
 var shoot = false;
-var shootType = 1;  // 0 == beam, 1 == bullets
+var shootType = 0;  // 0 == bullets, 1 == beam, 2 == bombs
 var movebads = false;
 var badShoot = false;
 var bomb = false;
@@ -42,7 +42,7 @@ document.addEventListener('keydown', function(event) {
         shoot = true;
     }
     if(event.keyCode == 16) { //shift
-    	shootType = (shootType+1)%2;
+    	shootType = ++shootType%3;
     }
     if(event.keyCode == 38) { //up
        goup = true;
@@ -88,6 +88,7 @@ document.addEventListener('keydown', function(event) {
 document.addEventListener('keyup', function(event) {
     if(event.keyCode == 32) {
        shoot = false;
+       ship.limit = false;
    }
     else if(event.keyCode == 38) {
        goup = false;
@@ -157,9 +158,9 @@ function moveBullets(){
 }
 
 function laser(){
-	if(shootType == 0)
+	if(shootType === 1)
 	for (var i = 0; i < bads.length; i++) {
-		if( bads[i].y+1 >= ship.y && bads[i].y-1 <= ship.y ){
+		if(bads[i].x < screenW && bads[i].y+1 >= ship.y && bads[i].y-1 <= ship.y ){
 			bads[i].explode();
 		}
 	}
@@ -238,7 +239,7 @@ function drawAscii(arr, disp){
 	moveBullets();
 	moveBombs();
 	if(badShoot){ bads_shoot(); } // <<<<< will need to be replaced
-	if(shoot){if(shootType === 1){ ship.shoot(); }else{ laser(); }}
+	if(shoot){if(shootType !== 1){ ship.shoot(); }else{ laser(); }}
 
 	for(var y = 0; y < 50; y++) { 
 		 for(var x = 0; x < 100; x++) {
@@ -250,9 +251,9 @@ function drawAscii(arr, disp){
 	        	str += c;
 	        }
 	  		else if((c = checkBullets(x,y))){
-	 			str += c
+	 			str += c;
 			}
-			else if (shoot && shootType === 0 && y === ship.y && x > 4){ 
+			else if (shoot && shootType === 1 && y === ship.y && x > 4){ 
 				str += '-';
 			}
 			else if(bomb && checkBombs(x,y)){
