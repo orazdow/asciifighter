@@ -28,7 +28,7 @@ function Bad(m) {
 	this.delay = 0;
 	this.spd = 1; // 1 = norm
 	this.arr = bchars_a;
-	this.moves = [0,0,2,1];
+	this.moves = [0,2,1,1];
 
 	this.bulletrtn = 'left';
 	this.s_interval = 9;

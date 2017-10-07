@@ -205,10 +205,9 @@ function bads_shoot(){
 }
 
 function checkBombs(x, y){
-	for(var i = 0; i < bombs.length; i++){
-		
+	for(var i = 0; i < bombs.length; i++){		
 		let a = 0.1*(((bombs[i].x-x)*0.5)**2+(bombs[i].y-y)**2);
-
+		
 		if((a-bombs[i].n > -5 &&  a-bombs[i].n < -2) || (a-bombs[i].n > 3 &&  a-bombs[i].n < 4) 
 			|| (a-bombs[i].n > 8 &&  a-bombs[i].n < 10)){
 			return true;
