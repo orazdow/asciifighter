@@ -32,7 +32,7 @@ function avg(arr){
 	}) / arr.length;
 }
 
-bads.push(new Bad());
+bads.push(new Bad({y:10}));
 
 window.setInterval(function(){ drawAscii(bkgd, display); }, 45);
 
@@ -151,7 +151,7 @@ function moveBullets(){
 				}
 		}
 
-		if (bullets[i].remove || bullets[i].offScreen() || bullets[i].rmv){
+		if(bullets[i].remove || bullets[i].offScreen()){
 			bullets.splice(i, 1);
 		}
 	}
@@ -243,7 +243,7 @@ function drawAscii(arr, disp){
 
 	for(var y = 0; y < 50; y++) { 
 		 for(var x = 0; x < 100; x++) {
-        // let t1 = performance.now();
+          let t1 = performance.now();
 	        if((c = ship.getChar(x,y)) != 'n'){
 	        	str += c;
 	        }
@@ -262,8 +262,8 @@ function drawAscii(arr, disp){
 	        else{
 	   	    str += arr[Math.round((noise.perlin2(a+x/60, y/30)+1)*0.5*arr.length)]; 
 	   	    }
-	   	    // if(rec)
-	   	    // perf.push(performance.now()-t1);
+	   	     if(rec)
+	   	     perf.push(performance.now()-t1);
 	 	 }
 	   str += '\n';
 	  }

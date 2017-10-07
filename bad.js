@@ -20,19 +20,16 @@ c:
  <<>
   */
 
-function Bad(x, y) {
+
+function Bad(m) {
 	
-	
-	this.y = 10; // mid start pos
-	this.ydir = 1; // -1 reverses ydir
-	this.xoffset = 10;
+	this.y = 10; 
+	this.xoffset = 0; 
 	this.delay = 0;
-	this.spd = 1; //0 = slower, 1 = norm, 2 = faster etc
+	this.spd = 1; // 1 = norm
 	this.arr = bchars_a;
-	this.movecb = straight_stop_down_stop_up;
-//	this.movecb = globalmvCb;
-//	this.moves = ['straight', 'stop', 'down', 'stop', 'up'];
-	
+	this.moves = [0,0,2,1];
+
 	this.bulletrtn = 'left';
 	this.s_interval = 9;
 	this.s_num = 1;
@@ -40,21 +37,33 @@ function Bad(x, y) {
 	this.bchar = '$';
 	this.bspd = 3;
 
+	if(m){
+		if(m.y){this.y = m.y;}
+		if(m.xoffset){this.xoffset = m.xoffset;}
+		if(m.delay){this.delay = m.delay;}
+		if(m.spd){this.spd = m.spd;}
+		if(m.arr){this.arr = m.arr;}
+		if(m.moves){this.moves = m.moves;}
+		if(m.bulletrtn){this.bulletrtn = m.bulletrtn;}
+		if(m.s_interval){this.s_interval = m.s_interval;}
+		if(m.s_num){this.s_num = m.s_num;}
+		if(m.stages){this.stages = m.stages;}
+		if(m.bchar){this.bchar = m.bchar;}
+		if(m.bspd){this.bspd = m.bspd;}
+	}
 
+	this.movecb = globalmvCb;
 	this.splode = false;
 	this.fade = false;
-	this.x = screenW+this.xoffset; // left edge
+	this.x = screenW+this.xoffset; 
 	this.mcnt = 0-this.delay;
-	this.ycoef = 2*this.ydir; 
 	this.cnt = 0;
 	this.char = 'n';
 	this.a = 0;
 	this.mode = 0;
-	this.mlen = 16; // not using
 
 	this.move = function(){
-		// this.movecb(this.moves);
-		this.movecb();
+		 this.movecb(this.moves);
 	}
 
 	this.shoot = function(){
@@ -64,13 +73,13 @@ function Bad(x, y) {
 	this.shootFunc = function(interval, num, stages){
 		if(this.x < screenW){
 			if(!stages){
-				if(this.mcnt%interval < num)// || this.mcnt === 1) //immediate shoot 
-					bullets.push(createBullet(this.x-1, this.y, this.bulletrtn, this.bspd, this.bulletrtn, this.bchar));
+			if(this.mcnt%interval < num)// || this.mcnt === 1) //immediate shoot 
+				bullets.push(createBullet(this.x-1, this.y, this.bulletrtn, this.bspd, this.bulletrtn, this.bchar));
 			}else{
-				if(this.mode === 0 && stages.s0 || this.mode === 1 && stages.s1 || this.mode === 2 && stages.s2 
-					|| this.mode === 3 && stages.s3 || this.mode === 4 && stages.s4){
-					if(this.mcnt%interval < num)
-						bullets.push(createBullet(this.x-1, this.y, this.bulletrtn, this.bspd, this.bulletrtn, this.bchar));
+			if(this.mode === 0 && stages.s0 || this.mode === 1 && stages.s1 || this.mode === 2 && stages.s2 
+				|| this.mode === 3 && stages.s3 || this.mode === 4 && stages.s4){
+				if(this.mcnt%interval < num)
+				bullets.push(createBullet(this.x-1, this.y, this.bulletrtn, this.bspd, this.bulletrtn, this.bchar));
 				}
 			}
 		}
