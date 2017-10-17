@@ -62,6 +62,10 @@ function Bad(m) {
 	this.a = 0;
 	this.mode = 0;
 
+	this.setDelay = function(delay){
+		this.mcnt = 0-delay;
+	}
+
 	this.move = function(){
 		 this.movecb(this.moves);
 	}

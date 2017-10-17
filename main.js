@@ -136,7 +136,7 @@ function moveBullets(){
 		
 		bullets[i].move(); 
         
-        if(bullets[i].toright){ //badsplode
+        if(bullets[i].toright && bullets[i].x < screenW){ //badsplode
 			for (var j = 0; j < bads.length; j++) {
 				if( bullets[i].x >= bads[j].x && bullets[i].x < bads[j].x+3){
 					if( bullets[i].y >= bads[j].y-1 && bullets[i].y <= bads[j].y+1 ){
