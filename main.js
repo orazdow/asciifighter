@@ -9,9 +9,10 @@ var speed = 1;
 
 var goup = false, godown = false;
 var shoot = false;
-var shootType = 1;  // 0 == beam, 1 == bullets
+var shootType = 0;  // 0 == bullets, 1 == beam, 2 == bombs
 var movebads = false;
 var badShoot = false;
+var bomb = false;
 
 var screenW = 100;
 var screenH = 50;
@@ -20,10 +21,20 @@ const ship = new Ship();
 
 var bullets = [];
 var bads = [];
+var bombs = [];
 
-bads.push(new Bad());
+var rec = false;
+var perf = [];
+var average = 0;
+function avg(arr){
+	return arr.reduce((a,b)=>{
+		return a + b;
+	}) / arr.length;
+}
 
-window.setInterval(function(){ drawAscii(bkgd, display); }, 50);
+bads.push(new Bad({y:10}));
+
+window.setInterval(function(){ drawAscii(bkgd, display); }, 45);
 
 
 document.addEventListener('keydown', function(event) {
@@ -31,7 +42,7 @@ document.addEventListener('keydown', function(event) {
         shoot = true;
     }
     if(event.keyCode == 16) { //shift
-    	shootType = (shootType+1)%2;
+    	shootType = ++shootType%3;
     }
     if(event.keyCode == 38) { //up
        goup = true;
@@ -58,16 +69,26 @@ document.addEventListener('keydown', function(event) {
        movebads = true;
     }
     if(event.keyCode == 81){ //q
-    	/////////////
+    	bads = [];
+    	bads.push(new Bad());
     }
     if(event.keyCode == 87){ //w
        /////////////
+       rec = !rec;
+    }
+    if(event.keyCode == 83){ //s
+    	badShoot = !badShoot;
+    }
+    if(event.keyCode == 69){ //e
+    	average = avg(perf);
+    	console.log(average);
     }
 });
 
 document.addEventListener('keyup', function(event) {
     if(event.keyCode == 32) {
        shoot = false;
+       ship.limit = false;
    }
     else if(event.keyCode == 38) {
        goup = false;
@@ -115,7 +136,7 @@ function moveBullets(){
 		
 		bullets[i].move(); 
         
-        if(bullets[i].toright){ //badsplode
+        if(bullets[i].toright && bullets[i].x < screenW){ //badsplode
 			for (var j = 0; j < bads.length; j++) {
 				if( bullets[i].x >= bads[j].x && bullets[i].x < bads[j].x+3){
 					if( bullets[i].y >= bads[j].y-1 && bullets[i].y <= bads[j].y+1 ){
@@ -130,16 +151,16 @@ function moveBullets(){
 				}
 		}
 
-		if (bullets[i].remove || bullets[i].offScreen() || bullets[i].rmv){
+		if(bullets[i].remove || bullets[i].offScreen()){
 			bullets.splice(i, 1);
 		}
 	}
 }
 
 function laser(){
-	if(shootType == 0)
+	if(shootType === 1)
 	for (var i = 0; i < bads.length; i++) {
-		if( bads[i].y+1 >= ship.y && bads[i].y-1 <= ship.y ){
+		if(bads[i].x < screenW && bads[i].y+1 >= ship.y && bads[i].y-1 <= ship.y ){
 			bads[i].explode();
 		}
 	}
@@ -149,10 +170,10 @@ function laser(){
 function checkBullets(x, y) {
     for (var i = 0; i < bullets.length; i++) {
 	  if( bullets[i].check(x,y) ){ 
-	  	return true; 
+	  	return bullets[i].char; 
 	  } 
 	}
-	return false;
+	return 0;
 }
 
 function checkShips(x, y) {
@@ -183,6 +204,29 @@ function bads_shoot(){
 	}
 }
 
+function checkBombs(x, y){
+	for(var i = 0; i < bombs.length; i++){		
+		let a = 0.1*(((bombs[i].x-x)*0.5)**2+(bombs[i].y-y)**2);
+		
+		if((a-bombs[i].n > -5 &&  a-bombs[i].n < -2) || (a-bombs[i].n > 3 &&  a-bombs[i].n < 4) 
+			|| (a-bombs[i].n > 8 &&  a-bombs[i].n < 10)){
+			return true;
+		}
+	}
+    return false; 
+}
+
+function moveBombs(){	
+	for (var i = bombs.length-1; i >= 0; i--) {
+		bombs[i].n+=3;
+		if(bombs[i].n > 290){ bombs.splice(i,1); }
+		bomb = bombs.length;
+	}
+}
+
+function createBomb(_x,_y){
+	bombs.push({x: _x, y: _y, n: 0});
+}
 
 function drawAscii(arr, disp){
 
@@ -192,27 +236,33 @@ function drawAscii(arr, disp){
 	moveShip();
 	moveBads();
 	moveBullets();
+	moveBombs();
 	if(badShoot){ bads_shoot(); } // <<<<< will need to be replaced
-	if(shoot){if(shootType == 1){ ship.shoot(); }else{ laser(); }}
-	
+	if(shoot){if(shootType !== 1){ ship.shoot(); }else{ laser(); }}
+
 	for(var y = 0; y < 50; y++) { 
 		 for(var x = 0; x < 100; x++) {
-
+          let t1 = performance.now();
 	        if((c = ship.getChar(x,y)) != 'n'){
 	        	str += c;
 	        }
 	        else if((c = checkShips(x,y)) != 'n'){
 	        	str += c;
 	        }
-	  		else if( checkBullets(x, y)){
-	 			str += bulletchar;
+	  		else if((c = checkBullets(x,y))){
+	 			str += c;
 			}
-			else if (shoot && shootType == 0 && y == ship.y && x > 4){ 
+			else if (shoot && shootType === 1 && y === ship.y && x > 4){ 
 				str += '-';
+			}
+			else if(bomb && checkBombs(x,y)){
+				str += '&';
 			}
 	        else{
 	   	    str += arr[Math.round((noise.perlin2(a+x/60, y/30)+1)*0.5*arr.length)]; 
 	   	    }
+	   	     if(rec)
+	   	     perf.push(performance.now()-t1);
 	 	 }
 	   str += '\n';
 	  }

@@ -8,6 +8,7 @@ function Ship(){
 	this.cnt = 0;
 	this.a = 0;
 	this.char = 'n';
+	this.limit = false;
 	
 	this.chars = ['<','#','#','#','n','n','n',
  				  'n','#','#','#','#','>','n',
@@ -47,9 +48,14 @@ function Ship(){
     	this.y++;
     }
 
-	this.shoot = function() {
-		if(shootType == 1){
-		  bullets.push( createBullet(this.x, this.y, 'right') );
+	this.shoot = function() { 
+		if(shootType === 0){
+		 	bullets.push( createBullet(this.x, this.y, 'right', 3, '$') );
+		}else if(shootType === 2){
+			if(!this.limit){
+				bullets.push( createBullet(this.x, this.y, 'bomb', 2, '$') );
+				this.limit = true;				
+			}
 		}
 	}
 
