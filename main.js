@@ -14,8 +14,8 @@ var movebads = false;
 var badShoot = false;
 var bomb = false;
 
-var screenW = 100;
-var screenH = 50;
+const screenW = 110;
+const screenH = 50;
 var bulletchar = '$';
 const ship = new Ship();
 
@@ -32,7 +32,9 @@ function avg(arr){
 	}) / arr.length;
 }
 
-bads.push(new Bad({y:10}));
+var hud = new Display();
+
+// bads.push(new Bad({y:10}));
 
 window.setInterval(function(){ drawAscii(bkgd, display); }, 45);
 
@@ -43,6 +45,7 @@ document.addEventListener('keydown', function(event) {
     }
     if(event.keyCode == 16) { //shift
     	shootType = ++shootType%3;
+    	hud.updateStr();
     }
     if(event.keyCode == 38) { //up
        goup = true;
@@ -240,10 +243,13 @@ function drawAscii(arr, disp){
 	if(badShoot){ bads_shoot(); } // <<<<< will need to be replaced
 	if(shoot){if(shootType !== 1){ ship.shoot(); }else{ laser(); }}
 
-	for(var y = 0; y < 50; y++) { 
-		 for(var x = 0; x < 100; x++) {
-          let t1 = performance.now();
-	        if((c = ship.getChar(x,y)) != 'n'){
+	for(var y = 0; y < screenH; y++) { 
+		 for(var x = 0; x < screenW; x++) {
+          // let t1 = performance.now();
+          	if((c = hud.getChar(x,y))){
+          		str += c;
+          	}
+	        else if((c = ship.getChar(x,y)) != 'n'){
 	        	str += c;
 	        }
 	        else if((c = checkShips(x,y)) != 'n'){
@@ -261,8 +267,8 @@ function drawAscii(arr, disp){
 	        else{
 	   	    str += arr[Math.round((noise.perlin2(a+x/60, y/30)+1)*0.5*arr.length)]; 
 	   	    }
-	   	     if(rec)
-	   	     perf.push(performance.now()-t1);
+	   	     // if(rec)
+	   	     // perf.push(performance.now()-t1);
 	 	 }
 	   str += '\n';
 	  }

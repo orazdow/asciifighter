@@ -13,6 +13,13 @@ var bchars_c = ['n','%','n',
 				'%','n','n',
 				'n','%','n'];
 
+var bchars_d = ['n','[','[',
+				'[','n','n',
+				'n','[','['];
+
+var bchars_e = ['n','<','>',
+				'<','>','n',
+				'n','<','>'];
 /*
 moveCb:
 straight = 0, up = 1, down = 2, stop = 3, shup = 4, shdown = 5

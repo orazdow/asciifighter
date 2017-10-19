@@ -50,7 +50,7 @@ function Ship(){
 
 	this.shoot = function() { 
 		if(shootType === 0){
-		 	bullets.push( createBullet(this.x, this.y, 'right', 3, '$') );
+		 	bullets.push( createBullet(this.x, this.y, 'right', 4, '$') ); //3
 		}else if(shootType === 2){
 			if(!this.limit){
 				bullets.push( createBullet(this.x, this.y, 'bomb', 2, '$') );
