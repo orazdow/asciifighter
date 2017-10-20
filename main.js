@@ -13,6 +13,7 @@ var shootType = 0;  // 0 == bullets, 1 == beam, 2 == bombs
 var movebads = false;
 var badShoot = false;
 var bomb = false;
+var shield = false;
 
 const screenW = 110;
 const screenH = 50;
@@ -86,6 +87,9 @@ document.addEventListener('keydown', function(event) {
     	average = avg(perf);
     	console.log(average);
     }
+    if(event.keyCode == 17){
+    	shield = true;
+    }
 });
 
 document.addEventListener('keyup', function(event) {
@@ -115,6 +119,9 @@ document.addEventListener('keyup', function(event) {
     }
     if(event.keyCode == 90){
        movebads = false;
+    }
+    if(event.keyCode == 17){
+    	shield = false;
     }
 });
 
@@ -147,16 +154,29 @@ function moveBullets(){
 					}
 				}
 			}
-		}else{  //shipsplode
+		}else if(!shield){  //shipsplode
 			if(bullets[i].x <= ship.x)
 				if(bullets[i].y >= ship.y-1 && bullets[i].y <= ship.y+1){
 					ship.explode(); bullets[i].remove = true;
 				}
+		}else{ 
+			shieldBullets(i);
 		}
 
 		if(bullets[i].remove || bullets[i].offScreen()){
 			bullets.splice(i, 1);
 		}
+	}
+}
+
+function shieldBullets(i){
+	if(bullets[i].y >= ship.y-2 && bullets[i].y <= ship.y+2){
+		if(bullets[i].x <= ship.x+3)
+			bullets[i].remove = true;
+	}
+	else if(bullets[i].y >= ship.y-4 && bullets[i].y <= ship.y+4){
+		if(bullets[i].x <= ship.x+2)
+			bullets[i].remove = true;
 	}
 }
 
@@ -194,17 +214,43 @@ function moveBads(){
 		  	if(movebads)
   			bads[i].move();
 
-  		if( bads[i].x <= ship.x+1 && bads[i].x+3 > 0)
-		if( bads[i].y+1 >= ship.y-1 && bads[i].y-1 <= ship.y+1){
-			ship.explode();
+  		if(!shield){
+	  		if( bads[i].x <= ship.x+1 && bads[i].x+3 > 0)
+			if( bads[i].y+1 >= ship.y-1 && bads[i].y-1 <= ship.y+1){
+				ship.explode();
+			}
+		}else{
+			if(bads[i].y+1 >= ship.y-4 && bads[i].y-1 <= ship.y+4){
+				if(bads[i].x <= ship.x+4){
+					bads[i].explode();
+				}
+			}
 		}
 	}
 }
+
 
 function bads_shoot(){
 	for (var i = 0; i < bads.length; i++) {
 		bads[i].shoot();
 	}
+}
+var sh = 22;
+var aa = 10;
+
+function checkshield(x,y){
+	aa = ++aa%40; //41 //38 //59 //46
+	if(aa === 0)
+	sh = ++sh%25;
+	if(x > ship.x && x < 20){
+	// aa = ++aa%68;
+	// if(aa === 0)
+	// sh = ++sh%25;
+		let a = (x-ship.x)**2+(y-ship.y)**2;	
+		if( a < 22 && a > sh){
+			return 'o';
+		}else return null;
+	}else return null;
 }
 
 function checkBombs(x, y){
@@ -253,6 +299,9 @@ function drawAscii(arr, disp){
 	        	str += c;
 	        }
 	        else if((c = checkShips(x,y)) != 'n'){
+	        	str += c;
+	        }
+	        else if(shield && (c = checkshield(x,y))){
 	        	str += c;
 	        }
 	  		else if((c = checkBullets(x,y))){
