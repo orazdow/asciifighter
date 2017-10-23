@@ -1,5 +1,7 @@
 
 var art_1 = [' ',' ',' ', '.' , '`', '/', '^', '*' ,'e', '0'];
+var art_2 = [' ',' ',' ', '.' , ',', '~', '^', 'm' ,' ', ';']; //% N  " . :  =  + * m % "
+
 var display = document.getElementById('disp');
 var bkgd = art_1;
 var a = 0;
@@ -34,6 +36,7 @@ function avg(arr){
 }
 
 var hud = new Display();
+hud.scenemode = true;
 
 // bads.push(new Bad({y:10}));
 
@@ -96,6 +99,7 @@ document.addEventListener('keyup', function(event) {
     if(event.keyCode == 32) {
        shoot = false;
        ship.limit = false;
+      // ship.shootReset();
    }
     else if(event.keyCode == 38) {
        goup = false;
@@ -200,13 +204,12 @@ function checkBullets(x, y) {
 }
 
 function checkShips(x, y) {
-   var rtn = 'n';
   for (var i = bads.length-1; i >= 0; i--) {
-  		if( (rtn = bads[i].getChar(x,y)) != 'n'){
+  		if( (rtn = bads[i].getChar(x,y))){
   			return rtn;
   		}
 	}
-  return rtn;
+  return '';
 }
 
 function moveBads(){
@@ -217,6 +220,7 @@ function moveBads(){
   		if(!shield){
 	  		if( bads[i].x <= ship.x+1 && bads[i].x+3 > 0)
 			if( bads[i].y+1 >= ship.y-1 && bads[i].y-1 <= ship.y+1){
+				if(!bads[i].splode)
 				ship.explode();
 			}
 		}else{
@@ -225,6 +229,9 @@ function moveBads(){
 					bads[i].explode();
 				}
 			}
+		}
+		if(bads[i].rmv){
+			bads.splice(i,1);
 		}
 	}
 }
@@ -275,6 +282,10 @@ function moveBombs(){
 
 function createBomb(_x,_y){
 	bombs.push({x: _x, y: _y, n: 0});
+	for (var i = 0; i < bads.length; i++) {
+		 if(bads[i].x < screenW)
+		 	bads[i].explode(20);
+	}
 }
 
 function drawAscii(arr, disp){
@@ -286,6 +297,7 @@ function drawAscii(arr, disp){
 	moveBads();
 	moveBullets();
 	moveBombs();
+	hud.anim();
 	if(badShoot){ bads_shoot(); } // <<<<< will need to be replaced
 	if(shoot){if(shootType !== 1){ ship.shoot(); }else{ laser(); }}
 
@@ -295,10 +307,10 @@ function drawAscii(arr, disp){
           	if((c = hud.getChar(x,y))){
           		str += c;
           	}
-	        else if((c = ship.getChar(x,y)) != 'n'){
+	        else if((c = ship.getChar(x,y))){
 	        	str += c;
 	        }
-	        else if((c = checkShips(x,y)) != 'n'){
+	        else if((c = checkShips(x,y))){
 	        	str += c;
 	        }
 	        else if(shield && (c = checkshield(x,y))){
@@ -314,7 +326,7 @@ function drawAscii(arr, disp){
 				str += '&';
 			}
 	        else{
-	   	    str += arr[Math.round((noise.perlin2(a+x/60, y/30)+1)*0.5*arr.length)]; 
+	   	     str += arr[Math.round((noise.perlin2(a+x/60, y/30)+1)*0.5*arr.length)]; 
 	   	    }
 	   	     // if(rec)
 	   	     // perf.push(performance.now()-t1);

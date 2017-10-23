@@ -7,20 +7,21 @@ function Ship(){
 	this.fade = false;
 	this.cnt = 0;
 	this.a = 0;
-	this.char = 'n';
+	this.char = '';
 	this.limit = false;
+	this.bcnt = 0;
 	
-	this.chars = ['<','#','#','#','n','n','n',
- 				  'n','#','#','#','#','>','n',
- 				  '<','#','#','#','n','n','n'];
+	this.chars = ['<','#','#','#','','','',
+ 				  '','#','#','#','#','>','',
+ 				  '<','#','#','#','','',''];
 
-	this.chars_fast = ['<','<','#','#','#','n','n',
- 			    	   'n','n','#','#','#','#','>',
- 			    	   '<','<','#','#','#','n','n'];
+	this.chars_fast = ['<','<','#','#','#','','',
+ 			    	   '','','#','#','#','#','>',
+ 			    	   '<','<','#','#','#','',''];
 
-	this.chars_slow = ['#','#','#','n','n','n','n',
- 		    		   '#','#','#','#','>','n','n',
- 			       	   '#','#','#','n','n','n','n',];
+	this.chars_slow = ['#','#','#','','','','',
+ 		    		   '#','#','#','#','>','','',
+ 			       	   '#','#','#','','','','',];
 
     this.arr = this.chars;
 
@@ -49,14 +50,22 @@ function Ship(){
     }
 
 	this.shoot = function() { 
+		// if(!this.limit){
 		if(shootType === 0){
 		 	bullets.push( createBullet(this.x, this.y, 'right', 4, '$') ); //3
-		}else if(shootType === 2){
-			if(!this.limit){
+		 //	this.bcnt++; if(this.bcnt > 15){this.limit = true;}
+		}else if(shootType === 2){	
+			if(!this.limit){		
 				bullets.push( createBullet(this.x, this.y, 'bomb', 2, '$') );
-				this.limit = true;				
-			}
+				this.limit = true;
+				}				
 		}
+	//}
+	}
+
+	this.shootReset = function(){
+		this.bcnt = 0;
+		this.limit = false;
 	}
 
 	this.explode = function(){
@@ -73,7 +82,7 @@ function Ship(){
 		if(this.fade){ return this.fadeChar(); }
 	    this.cnt++;
 	    if(this.cnt > 2000){ this.splode = false; this.cnt = 0; }
-	    if(this.char == 'n'){ return 'n'; }
+	    if(this.char == ''){ return ''; }
 	    return String.fromCharCode(((this.cnt)%13)+33);
 	}
 
@@ -81,7 +90,7 @@ function Ship(){
 		this.cnt++;
 		if(this.cnt > 2000){this.splode = false; this.fade = false; this.cnt = 0;}	
 		if(this.cnt%40 == 0){ this.a = ++this.a%3; }
-		if(this.char == 'n'){ return 'n'; }
+		if(this.char == ''){ return ''; }
 		if(this.a == 0){ return '\\'; }
 		else if(this.a == 1){ return '-'; }
 		else if(this.a == 2){ return '/'; }
@@ -101,8 +110,8 @@ function Ship(){
        			this.char = this.arr[x+14];
              	return !this.splode ? this.char : this.explodeChar();
        		}
-       		else return 'n';
+       		else return '';
        }
-       else return 'n';
+       else return '';
     }
 }

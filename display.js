@@ -9,16 +9,55 @@ class Display{
 		this.laser = 5;
 		this.weapon = 0;
         this.updateStr();
+        this.scene = new Scene();
+        this.scenemode = false;
+        this.cnt = 0;
+        //this.animate = true;
+
 
 	}
 
+	// getChar(x,y){
+	// 	if(this.animate){
+	// 			let c = this.scene.getChar(x,y);
+	// 			if(y < screenH-1 ){
+	// 				return c;
+	// 			}
+	// 			let c2 = (this.scenemode) ? null : this.arr[x-20]
+	// 			return c || c2;
+	// 	}
+	// 	if(y < screenH-1){
+	// 		return null;
+	// 	}
+	// 	else{
+	// 		return this.arr[x-20];
+	// 	}
+	// }
+
 	getChar(x,y){
+		if(this.scenemode){
+			return this.scene.getChar(x,y);
+		}
 		if(y < screenH-1){
 			return null;
 		}
 		else{
 			return this.arr[x-20];
 		}
+	}
+
+	anim(){
+		if(this.scenemode){
+			this.scene.anim();
+			this.cnt++;			
+		}
+		if(this.cnt > 110){
+			this.scenemode = false;
+			//start level now...
+		}
+		// if(this.cnt > 130){
+		// 	this.animate = false;
+		// }
 	}
 
 	updateStr(){
