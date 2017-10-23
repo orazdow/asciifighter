@@ -1,0 +1,56 @@
+helth indicator: ||| last one flashes
+hp in ship
+hp in bads (2 or 1)
+last hp patt
+generate item field in bads (null)
+items: diff guns, health, energy flash
+temp gun indicator (flashes whe running out)
+
+announcer guy:
+diff objectives for levels (kill n of this type), (get n things),(just get through)
+
+/~~\ /~~\  [~~] [~~] (--)  /~~] [-.]
+ ==   []    -    =    =    (= ) (~ )
+
+add perm gun to stock upgrade opt after level, or energy increase, helth bar, etc..
+
+limit first shoot type, add second shoottype for ship (burst)
+add diag spray shoot type 
+add seeking shoot type
+
+fix keyup
+(make keyevent go to handler object to do everything)
+
+add shield
+
+change speed
+
+make fwd rev spd cost fuel??
+make laser and shield use same energy rsrc?
+
+make display, weapon selector limit bars
+make powerup capsules to refresh weapon, sheild limits, bombs, add guns
+
+make bad char array size dynamic (not just 3X3)
+make obstical bads (rotating gun on island)
+make mine bads
+
+do splode logic
+add hp to some bads
+add damaged status to ship (2part hp)
+add emp burst for ship, bads
+
+make levels, level gen logic
+make pause, start placard display
+
+make imgtoascii cut scenes
+
+
+
+
+
+
+
+
+
+

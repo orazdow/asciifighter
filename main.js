@@ -1,5 +1,7 @@
 
 var art_1 = [' ',' ',' ', '.' , '`', '/', '^', '*' ,'e', '0'];
+var art_2 = [' ',' ',' ', '.' , ',', '~', '^', 'm' ,' ', ';']; //% N  " . :  =  + * m % "
+
 var display = document.getElementById('disp');
 var bkgd = art_1;
 var a = 0;
@@ -13,9 +15,10 @@ var shootType = 0;  // 0 == bullets, 1 == beam, 2 == bombs
 var movebads = false;
 var badShoot = false;
 var bomb = false;
+var shield = false;
 
-var screenW = 100;
-var screenH = 50;
+const screenW = 110;
+const screenH = 50;
 var bulletchar = '$';
 const ship = new Ship();
 
@@ -32,7 +35,10 @@ function avg(arr){
 	}) / arr.length;
 }
 
-bads.push(new Bad({y:10}));
+var hud = new Display();
+hud.scenemode = true;
+
+// bads.push(new Bad({y:10}));
 
 window.setInterval(function(){ drawAscii(bkgd, display); }, 45);
 
@@ -43,6 +49,7 @@ document.addEventListener('keydown', function(event) {
     }
     if(event.keyCode == 16) { //shift
     	shootType = ++shootType%3;
+    	hud.updateStr();
     }
     if(event.keyCode == 38) { //up
        goup = true;
@@ -83,12 +90,16 @@ document.addEventListener('keydown', function(event) {
     	average = avg(perf);
     	console.log(average);
     }
+    if(event.keyCode == 17){
+    	shield = true;
+    }
 });
 
 document.addEventListener('keyup', function(event) {
     if(event.keyCode == 32) {
        shoot = false;
        ship.limit = false;
+      // ship.shootReset();
    }
     else if(event.keyCode == 38) {
        goup = false;
@@ -112,6 +123,9 @@ document.addEventListener('keyup', function(event) {
     }
     if(event.keyCode == 90){
        movebads = false;
+    }
+    if(event.keyCode == 17){
+    	shield = false;
     }
 });
 
@@ -144,16 +158,29 @@ function moveBullets(){
 					}
 				}
 			}
-		}else{  //shipsplode
+		}else if(!shield){  //shipsplode
 			if(bullets[i].x <= ship.x)
 				if(bullets[i].y >= ship.y-1 && bullets[i].y <= ship.y+1){
 					ship.explode(); bullets[i].remove = true;
 				}
+		}else{ 
+			shieldBullets(i);
 		}
 
 		if(bullets[i].remove || bullets[i].offScreen()){
 			bullets.splice(i, 1);
 		}
+	}
+}
+
+function shieldBullets(i){
+	if(bullets[i].y >= ship.y-2 && bullets[i].y <= ship.y+2){
+		if(bullets[i].x <= ship.x+3)
+			bullets[i].remove = true;
+	}
+	else if(bullets[i].y >= ship.y-4 && bullets[i].y <= ship.y+4){
+		if(bullets[i].x <= ship.x+2)
+			bullets[i].remove = true;
 	}
 }
 
@@ -177,13 +204,12 @@ function checkBullets(x, y) {
 }
 
 function checkShips(x, y) {
-   var rtn = 'n';
   for (var i = bads.length-1; i >= 0; i--) {
-  		if( (rtn = bads[i].getChar(x,y)) != 'n'){
+  		if( (rtn = bads[i].getChar(x,y))){
   			return rtn;
   		}
 	}
-  return rtn;
+  return '';
 }
 
 function moveBads(){
@@ -191,17 +217,47 @@ function moveBads(){
 		  	if(movebads)
   			bads[i].move();
 
-  		if( bads[i].x <= ship.x+1 && bads[i].x+3 > 0)
-		if( bads[i].y+1 >= ship.y-1 && bads[i].y-1 <= ship.y+1){
-			ship.explode();
+  		if(!shield){
+	  		if( bads[i].x <= ship.x+1 && bads[i].x+3 > 0)
+			if( bads[i].y+1 >= ship.y-1 && bads[i].y-1 <= ship.y+1){
+				if(!bads[i].splode)
+				ship.explode();
+			}
+		}else{
+			if(bads[i].y+1 >= ship.y-4 && bads[i].y-1 <= ship.y+4){
+				if(bads[i].x <= ship.x+4){
+					bads[i].explode();
+				}
+			}
+		}
+		if(bads[i].rmv){
+			bads.splice(i,1);
 		}
 	}
 }
+
 
 function bads_shoot(){
 	for (var i = 0; i < bads.length; i++) {
 		bads[i].shoot();
 	}
+}
+var sh = 22;
+var aa = 10;
+
+function checkshield(x,y){
+	aa = ++aa%40; //41 //38 //59 //46
+	if(aa === 0)
+	sh = ++sh%25;
+	if(x > ship.x && x < 20){
+	// aa = ++aa%68;
+	// if(aa === 0)
+	// sh = ++sh%25;
+		let a = (x-ship.x)**2+(y-ship.y)**2;	
+		if( a < 22 && a > sh){
+			return 'o';
+		}else return null;
+	}else return null;
 }
 
 function checkBombs(x, y){
@@ -226,6 +282,10 @@ function moveBombs(){
 
 function createBomb(_x,_y){
 	bombs.push({x: _x, y: _y, n: 0});
+	for (var i = 0; i < bads.length; i++) {
+		 if(bads[i].x < screenW)
+		 	bads[i].explode(20);
+	}
 }
 
 function drawAscii(arr, disp){
@@ -237,16 +297,23 @@ function drawAscii(arr, disp){
 	moveBads();
 	moveBullets();
 	moveBombs();
+	hud.anim();
 	if(badShoot){ bads_shoot(); } // <<<<< will need to be replaced
 	if(shoot){if(shootType !== 1){ ship.shoot(); }else{ laser(); }}
 
-	for(var y = 0; y < 50; y++) { 
-		 for(var x = 0; x < 100; x++) {
-          let t1 = performance.now();
-	        if((c = ship.getChar(x,y)) != 'n'){
+	for(var y = 0; y < screenH; y++) { 
+		 for(var x = 0; x < screenW; x++) {
+          // let t1 = performance.now();
+          	if((c = hud.getChar(x,y))){
+          		str += c;
+          	}
+	        else if((c = ship.getChar(x,y))){
 	        	str += c;
 	        }
-	        else if((c = checkShips(x,y)) != 'n'){
+	        else if((c = checkShips(x,y))){
+	        	str += c;
+	        }
+	        else if(shield && (c = checkshield(x,y))){
 	        	str += c;
 	        }
 	  		else if((c = checkBullets(x,y))){
@@ -259,10 +326,10 @@ function drawAscii(arr, disp){
 				str += '&';
 			}
 	        else{
-	   	    str += arr[Math.round((noise.perlin2(a+x/60, y/30)+1)*0.5*arr.length)]; 
+	   	     str += arr[Math.round((noise.perlin2(a+x/60, y/30)+1)*0.5*arr.length)]; 
 	   	    }
-	   	     if(rec)
-	   	     perf.push(performance.now()-t1);
+	   	     // if(rec)
+	   	     // perf.push(performance.now()-t1);
 	 	 }
 	   str += '\n';
 	  }
