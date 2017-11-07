@@ -10,6 +10,8 @@ function Ship(){
 	this.char = '';
 	this.limit = false;
 	this.bcnt = 0;
+	this.laser = 5;
+	this.shield = 5;
 	
 	this.chars = ['<','#','#','#','','','',
  				  '','#','#','#','#','>','',
@@ -39,6 +41,10 @@ function Ship(){
     		this.x = 5;
     	}
 
+    }
+
+    this.setDisplay = function(d){
+    	this.hud = d;
     } 
 
     this.moveUp = function(){
@@ -61,6 +67,38 @@ function Ship(){
 				}				
 		}
 	//}
+	}
+
+	this.energy = function(shootType, shoot, shield){
+		 if(shoot && shootType === 1){
+		 		if(this.laser > 0){
+				 	if(++this.cnt%4 === 0){
+		 			this.laser--; this.hud.laser = this.laser; this.hud.updateStr();
+		 		}
+		 	  }
+		 	}else{
+		 			if(this.laser < 5){
+				 		if(++this.cnt%5 === 0){
+		 				this.laser++; this.hud.laser = this.laser; this.hud.updateStr();
+		 			}
+		 		}
+		 	}
+
+		 if(shield){
+		 		if(this.shield > 0){
+				 	if(++this.cnt%4 === 0){
+		 			this.shield--; this.hud.shield = this.shield; this.hud.updateStr();
+		 		}
+		 	  }
+		 	}else{
+		 			if(this.shield < 5){
+				 		if(++this.cnt%5 === 0){
+		 				this.shield++; this.hud.shield = this.shield; this.hud.updateStr();
+		 			}
+		 		}
+		 	}
+
+		 
 	}
 
 	this.shootReset = function(){

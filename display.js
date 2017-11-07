@@ -10,7 +10,7 @@ class Display{
 		this.weapon = 0;
         this.updateStr();
         this.scene = new Scene();
-        this.scenemode = false;
+        this.scenemode = true;
         this.cnt = 0;
         //this.animate = true;
 
@@ -44,14 +44,24 @@ class Display{
 		else{
 			return this.arr[x-20];
 		}
+		// if(y < screenH-2){
+
+		// }else{
+		// 	if(y === screenH-2){
+
+		// 	}
+		// 	if(y === screenH-1){
+				
+		// 	}
+		// }
 	}
 
 	anim(){
 		if(this.scenemode){
 			this.scene.anim();
-			this.cnt++;			
+			this.cnt++;  //<should be this.scene.timeout	
 		}
-		if(this.cnt > 110){
+		if(this.cnt > 110){ //<should be this.scene.timeout
 			this.scenemode = false;
 			//start level now...
 		}
@@ -64,6 +74,10 @@ class Display{
         this.str = `/ ships: ${this.shipStr()} bombs: ${this.bombStr()} shield: ${this.shieldStr()} laser: ${this.laserStr()} gun: ${this.weaponStr(shootType)}\\`;
         this.arr = this.str.split('');		
 	}
+
+	// updateStr(){
+
+	// }
 
 	weaponStr(t){
 	if(t === 0)

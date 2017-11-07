@@ -52,7 +52,6 @@ class Scene{
 
 	getChar(x,y){
 		return this.getArt(x,y);
-		return this.blinds(x,y,this.n);
 	}
 
 	blinds(x,y,l1,l2,n){

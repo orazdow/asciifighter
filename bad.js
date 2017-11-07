@@ -36,7 +36,7 @@ function Bad(m) {
 	this.s_num = 1;
 	this.stages = null; // { s0: 0, s1: 1, s2: 0, s3: 1, s4: 0 }
 	this.bchar = '$';
-	this.bspd = 3;
+	this.bspd = 4;
 
 	if(m){
 		if(m.y){this.y = m.y;}
@@ -70,6 +70,7 @@ function Bad(m) {
 
 	this.move = function(){
 		 this.movecb(this.moves);
+		 if(this.x+3 < 0){ this.rmv = true; }
 	}
 
 	this.shoot = function(){
@@ -109,7 +110,7 @@ function Bad(m) {
 	this.explodeChar = function(){
 		if(this.tempsplode || this.fade){ return this.flicker(); }
 	    this.cnt++;
-	    if(this.cnt > 380){ this.rmv = true; this.cnt = 0; }
+	    if(this.cnt > 150){ this.rmv = true; this.cnt = 0; }
 	    if(this.char == ''){ return ''; }
 	    return String.fromCharCode(((this.cnt)%13)+33);
 	}

@@ -46,11 +46,62 @@ make pause, start placard display
 make imgtoascii cut scenes
 
 
+/ ships: ^^^   bombs: ***   shield: ----- laser: ----- gun: + \
+
+/ ships: ^^^   bombs: ***   generator: ------------- gun: + \
+
+/ ships: ^^^   bombs: ***   shield: ----- laser: ----- hp: ||| gun: + \
+
+/ ships: ^^^   bombs: ***   energy: -------- gun: [ + ] ---   *  \
 
 
+  / ships: ^^^          bombs:              \
+ /  energy: ----------- gun: [ + ] ---   *   \
 
 
+  / ships: ^^^    bombs:     hp: |||||    \
+ /  energy: ----------- gun: [ +] --   *   \
 
 
+  / ships: ^^^    bombs:     hp: <><><>   \
+ /  energy: ----------- gun: [ +] --   *   \
 
 
+  / ships: ^^^   bombs:    gun:  +  -- [<>] \
+ / shield: -------- laser: --------  hp: ||| \
+
+
+  / ships: ^^^    bombs:     gun:   +  -- [ *] \
+ / shield: -------- laser: --------  hp: <><><> \
+
+
+  / ships: ^^^    bombs:     gun:   +  -- [ *] \
+ / hp: <><><>  shield: -------- laser: -------- \
+
+
+gun: [ + ] ---   * 
+gun:   +  [---]  * 
+gun:   +  --- [ * ] 
+
+gun: [ +] --   * 
+gun:   + [--]  * 
+gun:   +  -- [ *] 
+
+gun: [ +] --  <> 
+gun:   + [--] <> 
+gun:   +  -- [<>] 
+
+gun: [ s] --   *  
+
+level state machine:
+
+load level[index] (reset ship clear bads, load bads, set terrain, reset hud scene, start leadin scene)
+if bads.length === 0 loadlevel[++index]
+
+level Obj:
+
+ -name string
+ -models array
+ -bads array
+ -terrain array, coefs
+ -announcer rtn

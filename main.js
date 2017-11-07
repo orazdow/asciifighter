@@ -36,7 +36,8 @@ function avg(arr){
 }
 
 var hud = new Display();
-hud.scenemode = true;
+ship.setDisplay(hud);
+// hud.scenemode = true;
 
 // bads.push(new Bad({y:10}));
 
@@ -158,13 +159,13 @@ function moveBullets(){
 					}
 				}
 			}
-		}else if(!shield){  //shipsplode
+		}else if(shield && ship.shield){  
+			shieldBullets(i);
+		}else{ //shipsplode
 			if(bullets[i].x <= ship.x)
 				if(bullets[i].y >= ship.y-1 && bullets[i].y <= ship.y+1){
 					ship.explode(); bullets[i].remove = true;
 				}
-		}else{ 
-			shieldBullets(i);
 		}
 
 		if(bullets[i].remove || bullets[i].offScreen()){
@@ -185,11 +186,12 @@ function shieldBullets(i){
 }
 
 function laser(){
-	if(shootType === 1)
+	if(shoot){
 	for (var i = 0; i < bads.length; i++) {
 		if(bads[i].x < screenW && bads[i].y+1 >= ship.y && bads[i].y-1 <= ship.y ){
 			bads[i].explode();
 		}
+	}
 	}
 
 }
@@ -291,15 +293,16 @@ function createBomb(_x,_y){
 function drawAscii(arr, disp){
 
 	str = ""; 
-	var c = 'n';
+	var c = '';
 	a += terrainSpeed;
 	moveShip();
 	moveBads();
 	moveBullets();
 	moveBombs();
 	hud.anim();
+	ship.energy(shootType, shoot, shield);
 	if(badShoot){ bads_shoot(); } // <<<<< will need to be replaced
-	if(shoot){if(shootType !== 1){ ship.shoot(); }else{ laser(); }}
+	if(shoot){if(shootType !== 1){ ship.shoot(); }else{ if(ship.laser){laser();} }}
 
 	for(var y = 0; y < screenH; y++) { 
 		 for(var x = 0; x < screenW; x++) {
@@ -313,13 +316,13 @@ function drawAscii(arr, disp){
 	        else if((c = checkShips(x,y))){
 	        	str += c;
 	        }
-	        else if(shield && (c = checkshield(x,y))){
+	        else if(shield && ship.shield && (c = checkshield(x,y))){
 	        	str += c;
 	        }
 	  		else if((c = checkBullets(x,y))){
 	 			str += c;
 			}
-			else if (shoot && shootType === 1 && y === ship.y && x > 4){ 
+			else if (shoot && shootType === 1 && ship.laser && y === ship.y && x > 4){ 
 				str += '-';
 			}
 			else if(bomb && checkBombs(x,y)){
