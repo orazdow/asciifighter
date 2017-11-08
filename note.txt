@@ -96,7 +96,7 @@ gun: [ s] --   *
 level state machine:
 
 load level[index] (reset ship clear bads, load bads, set terrain, reset hud scene, start leadin scene)
-if bads.length === 0 loadlevel[++index]
+if bads.length === 0 && !hud.scenemode : loadlevel[++index]
 
 level Obj:
 

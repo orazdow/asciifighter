@@ -9,8 +9,8 @@ class Display{
 		this.laser = 5;
 		this.weapon = 0;
         this.updateStr();
-        this.scene = new Scene();
-        this.scenemode = true;
+        this.scene = null;
+        this.scenemode = false;
         this.cnt = 0;
         //this.animate = true;
 
@@ -33,6 +33,13 @@ class Display{
 	// 		return this.arr[x-20];
 	// 	}
 	// }
+
+	setScene(scene){
+		if(scene){
+			this.scene = scene;
+			this.scenemode = true;
+		}
+	}
 
 	getChar(x,y){
 		if(this.scenemode){
@@ -59,9 +66,9 @@ class Display{
 	anim(){
 		if(this.scenemode){
 			this.scene.anim();
-			this.cnt++;  //<should be this.scene.timeout	
+			this.scene.cnt++;  //<should be this.scene.timeout	
 		}
-		if(this.cnt > 110){ //<should be this.scene.timeout
+		if(this.scene && this.scene.cnt > this.scene.timeout){ //<should be this.scene.timeout
 			this.scenemode = false;
 			//start level now...
 		}

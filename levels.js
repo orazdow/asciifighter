@@ -1,7 +1,9 @@
 
-class Scene{
+class IntroScene extends Scene{
 	constructor(){
-
+		super();
+	this.cnt = 0;
+	this.timeout = 110;
 	this.art =
 "         _____ _______________________________________________________       \n\
         / /- |/  ___// ___/| || | --  / __/| / __/| || |_  __/  _/|   \\      \n\
@@ -100,3 +102,49 @@ class Scene{
 	}
 }
 
+let level1 = {
+
+	scene: new IntroScene(),
+
+	models: [
+
+		{
+			arr: bchars_a,
+			moves: [0,2,1,1],
+			s_interval: 9,
+			s_num: 1
+		},
+		{
+			arr: bchars_a,
+			moves: [0,2,1,1],
+			s_interval: 9,
+			s_num: 1
+		},
+		{
+			arr: bchars_a,
+			moves: [0,2,1,1],
+			s_interval: 9,
+			s_num: 1
+		},
+		{
+			arr: bchars_a,
+			moves: [0,2,1,1],
+			s_interval: 9,
+			s_num: 1
+		}
+
+	],
+
+	seq:   "0,0,10,,,-\
+			4,0,28,,,-\
+			7,1,35,,,-\
+			10,1,12,,,-\
+			12,0,20,,,-\
+			15,0,40,,,-\
+			18,2,12,,,-\
+			21,1,28,,,-\
+			24,0,20,,,-\
+			26,1,30,,,"
+
+
+}
