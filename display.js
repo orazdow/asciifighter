@@ -5,12 +5,12 @@ class Display{
 
 		this.ships = 3;
 		this.bombs = 3;
-		this.shield = 5;
-		this.laser = 5;
+		this.shield = 10;
+		this.laser = 10;
 		this.weapon = 0;
         this.updateStr();
         this.scene = new Scene();
-        this.scenemode = true;
+        this.scenemode = 0;
         this.cnt = 0;
         //this.animate = true;
 
@@ -38,23 +38,18 @@ class Display{
 		if(this.scenemode){
 			return this.scene.getChar(x,y);
 		}
-		if(y < screenH-1){
+		if(y < screenH-2){
 			return null;
 		}
-		else{
-			return this.arr[x-20];
+		else if(y < screenH-1){
+			return x < 78 ? this.arr[x-32] : null;
+		}else{
+		   return x > 30 ?  x < 85 ? this.arr[x+24] : null : null;
 		}
-		// if(y < screenH-2){
 
-		// }else{
-		// 	if(y === screenH-2){
 
-		// 	}
-		// 	if(y === screenH-1){
-				
-		// 	}
-		// }
 	}
+
 
 	anim(){
 		if(this.scenemode){
@@ -70,10 +65,19 @@ class Display{
 		// }
 	}
 
-	updateStr(){
-        this.str = `/ ships: ${this.shipStr()} bombs: ${this.bombStr()} shield: ${this.shieldStr()} laser: ${this.laserStr()} gun: ${this.weaponStr(shootType)}\\`;
+	updateStr(){ //110 43 / 45
+        this.str = `/ ships: ${this.shipStr()} bombs: ${this.bombStr()} gun: ${this.weaponStr(shootType)} \\
+        / shield: ${this.shieldStr()} laser: ${this.laserStr()} hp: ||| \\`;
         this.arr = this.str.split('');		
 	}
+
+//  / ships: ^^^   bombs:    gun:  +  -- [<>] \
+// / shield: -------- laser: --------  hp: ||| \
+
+	// updateStr(){
+ //        this.str = `/ ships: ${this.shipStr()} bombs: ${this.bombStr()} shield: ${this.shieldStr()} laser: ${this.laserStr()} gun: ${this.weaponStr(shootType)}\\`;
+ //        this.arr = this.str.split('');		
+	// }
 
 	// updateStr(){
 
@@ -81,11 +85,11 @@ class Display{
 
 	weaponStr(t){
 	if(t === 0)
-	  return "+ ";
+	  return "[+] --  <> ";
 	if(t === 1)
-	  return "--";
+	  return " + [--] <> ";
 	if(t === 2)
-	  return "* ";
+	  return " +  -- [<>]";
 	}
 	shipStr(){
 		switch(this.ships){
@@ -121,34 +125,54 @@ class Display{
 	}
 	shieldStr(){
 		switch(this.shield){
+			case 10:
+			return "----------";
+			case 9:
+			return "--------- ";
+			case 8:
+			return "--------  ";
+			case 7:
+			return "-------   ";
+			case 6:
+			return "------    ";
 			case 5:
-			return "-----";
+			return "-----     ";
 			case 4:
-			return "---- ";
+			return "----      ";
 			case 3:
-			return "---  ";
+			return "---       ";
 			case 2:
-			return "--   ";
+			return "--        ";
 			case 1:
-			return "-    ";		
+			return "-         ";		
 			case 0:
-			return "     ";
+			return "          ";
 		}
 	}
 	laserStr(){
 		switch(this.laser){
+			case 10:
+			return "----------";
+			case 9:
+			return "--------- ";
+			case 8:
+			return "--------  ";
+			case 7:
+			return "-------   ";
+			case 6:
+			return "------    ";
 			case 5:
-			return "-----";
+			return "-----     ";
 			case 4:
-			return "---- ";
+			return "----      ";
 			case 3:
-			return "---  ";
+			return "---       ";
 			case 2:
-			return "--   ";
+			return "--        ";
 			case 1:
-			return "-    ";		
+			return "-         ";		
 			case 0:
-			return "     ";
+			return "          ";
 		}
 	}
 

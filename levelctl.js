@@ -67,16 +67,22 @@ let models1 = [
 	s_interval: 9,
 	s_num: 1
 },
+{
+	arr: b_spec, //s pill
+	moves: [0,2,1,1],
+	s_num: 0,
+	dimension: 1,
+	payload: 'powerup'
+}
 
 ];
-
 
 // timecnt, modelindex, y, movesoverride, optsoverride, (last 2 optional)
 // movesoverride: can be array string or moveslist index
 // optsoverride: object of ship options (stringify, or escape props in double quotes)
 let seq1 = 
-"0,0,10,,,-\
-4,0,28,,,-\
+"0,4,10,,,-\
+4,4,28,,,-\
 7,1,35,,,-\
 10,1,12,,,-\
 12,0,20,,,-\

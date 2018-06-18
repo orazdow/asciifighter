@@ -37,20 +37,23 @@ function Bad(m) {
 	this.stages = null; // { s0: 0, s1: 1, s2: 0, s3: 1, s4: 0 }
 	this.bchar = '$';
 	this.bspd = 4;
+	this.dimension = 3;
 
-	if(m){
-		if(m.y){this.y = m.y;}
-		if(m.xoffset){this.xoffset = m.xoffset;}
-		if(m.delay){this.delay = m.delay;}
-		if(m.spd){this.spd = m.spd;}
-		if(m.arr){this.arr = m.arr;}
-		if(m.moves){this.moves = m.moves;}
-		if(m.bulletrtn){this.bulletrtn = m.bulletrtn;}
-		if(m.s_interval){this.s_interval = m.s_interval;}
-		if(m.s_num){this.s_num = m.s_num;}
-		if(m.stages){this.stages = m.stages;}
-		if(m.bchar){this.bchar = m.bchar;}
-		if(m.bspd){this.bspd = m.bspd;}
+	if(m){ 
+		if(m.y != undefined){this.y = m.y;}
+		if(m.xoffset != undefined){this.xoffset = m.xoffset;}
+		if(m.delay != undefined){this.delay = m.delay;}
+		if(m.spd != undefined){this.spd = m.spd;}
+		if(m.arr != undefined){this.arr = m.arr;}
+		if(m.moves != undefined){this.moves = m.moves;}
+		if(m.bulletrtn != undefined){this.bulletrtn = m.bulletrtn;}
+		if(m.s_interval != undefined){this.s_interval = m.s_interval;}
+		if(m.s_num != undefined){this.s_num = m.s_num;}
+		if(m.stages != undefined){this.stages = m.stages;}
+		if(m.bchar != undefined){this.bchar = m.bchar;}
+		if(m.bspd != undefined){this.bspd = m.bspd;}
+		if(m.dimension != undefined){this.dimension = m.dimension;}
+		if(m.payload != undefined){this.payload = m.payload;}
 	}
 
 	this.movecb = globalmvCb;
@@ -73,7 +76,7 @@ function Bad(m) {
 		 if(this.x+3 < 0){ this.rmv = true; }
 	}
 
-	this.shoot = function(){
+	this.shoot = function(){ 
 		if(!this.splode)
 		this.shootFunc(this.s_interval, this.s_num, this.stages);
 	}
@@ -81,9 +84,10 @@ function Bad(m) {
 	this.shootFunc = function(interval, num, stages){
 		if(this.x < screenW){
 			if(!stages){
-			if(this.mcnt%interval < num)// || this.mcnt === 1) //immediate shoot 
+			if(this.mcnt%interval < num){// || this.mcnt === 1) //immediate shoot 
 				bullets.push(createBullet(this.x-1, this.y, this.bulletrtn, this.bspd, this.bulletrtn, this.bchar));
-			}else{
+			}
+			}else{ 
 			if(this.mode === 0 && stages.s0 || this.mode === 1 && stages.s1 || this.mode === 2 && stages.s2 
 				|| this.mode === 3 && stages.s3 || this.mode === 4 && stages.s4){
 				if(this.mcnt%interval < num)
@@ -139,7 +143,8 @@ function Bad(m) {
 		else if(this.a == 2){ return '/'; }
 	}
 
-	this.getChar = function(x,y){
+
+	this.getchar33 = function(x,y){
 		if(x >= this.x && x <= this.x+2){
         	if(y == this.y-1){ 
         		this.char = this.arr[noNaN(x%this.x)];
@@ -156,5 +161,23 @@ function Bad(m) {
         	else{ return ''; }
 		}else{ return ''; }
 	}
+	this.getchar2 = function(x,y){
+		if(x >= this.x && x <= this.x+7){
+			if(y == this.y){
+        		return !this.splode ? this.arr[noNaN(x%this.x)] : this.explodeChar();
+        	}
+        	else{ return ''; }
+		}else{ return ''; }
+	} 
+	this.getchar1 = function(x,y){
+		if(x >= this.x && x <= this.x+7){
+			if(y == this.y){
+        		return !this.splode ? this.arr[noNaN(x%this.x)] : this.explodeChar();
+        	}
+        	else{ return ''; }
+		}else{ return ''; }
+	} 
 
-}
+	this.getChar = this.dimension == 3? this.getchar33 : this.dimension == 2? this.getchar2 : this.getchar1;
+
+ }

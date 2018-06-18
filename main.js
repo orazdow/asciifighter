@@ -12,8 +12,8 @@ var speed = 1;
 var goup = false, godown = false;
 var shoot = false;
 var shootType = 0;  // 0 == bullets, 1 == beam, 2 == bombs
-var movebads = false;
-var badShoot = false;
+var movebads = true;
+var badShoot = true;
 var bomb = false;
 var shield = false;
 
@@ -41,14 +41,14 @@ ship.setDisplay(hud);
 
 // bads.push(new Bad({y:10}));
 
-window.setInterval(function(){ drawAscii(bkgd, display); }, 45);
+// window.setInterval(function(){ drawAscii(bkgd, display); }, 45);
 
 
 document.addEventListener('keydown', function(event) {
     if(event.keyCode == 32) { //space
         shoot = true;
     }
-    if(event.keyCode == 16) { //shift
+    if(event.keyCode == 88) { //x
     	shootType = ++shootType%3;
     	hud.updateStr();
     }
@@ -73,7 +73,7 @@ document.addEventListener('keydown', function(event) {
     if(event.keyCode == 65) { //a
        badShoot = true;
     }
-    if(event.keyCode == 90){ //z
+    if(event.keyCode == 83){ //s
        movebads = true;
     }
     if(event.keyCode == 81){ //q
@@ -91,7 +91,7 @@ document.addEventListener('keydown', function(event) {
     	average = avg(perf);
     	console.log(average);
     }
-    if(event.keyCode == 17){
+    if(event.keyCode == 90){ //z
     	shield = true;
     }
 });
@@ -122,10 +122,10 @@ document.addEventListener('keyup', function(event) {
     if(event.keyCode == 65) { 
        badShoot = false;
     }
-    if(event.keyCode == 90){
+    if(event.keyCode == 83){ //s
        movebads = false;
     }
-    if(event.keyCode == 17){
+    if(event.keyCode == 90){ //z
     	shield = false;
     }
 });
@@ -222,8 +222,11 @@ function moveBads(){
   		if(!shield){
 	  		if( bads[i].x <= ship.x+1 && bads[i].x+3 > 0)
 			if( bads[i].y+1 >= ship.y-1 && bads[i].y-1 <= ship.y+1){
-				if(!bads[i].splode)
-				ship.explode();
+				if(!bads[i].splode){ 
+					if(bads[i].payload)
+						ship.payload = bads[i].payload;
+					ship.explode();
+				}
 			}
 		}else{
 			if(bads[i].y+1 >= ship.y-4 && bads[i].y-1 <= ship.y+4){

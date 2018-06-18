@@ -10,8 +10,12 @@ function Ship(){
 	this.char = '';
 	this.limit = false;
 	this.bcnt = 0;
-	this.laser = 5;
-	this.shield = 5;
+	this.laser = 10;
+	this.shield = 10;
+	this.b_spec = false;
+	this.l_cnt = 0;
+	this.s_cnt = 0;
+	this.s_cnt_m = 0;
 	
 	this.chars = ['<','#','#','#','','','',
  				  '','#','#','#','#','>','',
@@ -58,7 +62,19 @@ function Ship(){
 	this.shoot = function() { 
 		// if(!this.limit){
 		if(shootType === 0){
+			if(!this.b_spec){
 		 	bullets.push( createBullet(this.x, this.y, 'right', 4, '$') ); //3
+		 	}else{
+		 		if(!this.limit){
+		 			bullets.push( createBullet(this.x, this.y, 'split_r', 3, '$') );
+		 			
+		 			if(++this.l_cnt >= 3){
+		 				this.limit = true;
+		 				this.l_cnt = 0;
+		 			}
+		 		}
+
+		 	}
 		 //	this.bcnt++; if(this.bcnt > 15){this.limit = true;}
 		}else if(shootType === 2){	
 			if(!this.limit){		
@@ -77,7 +93,7 @@ function Ship(){
 		 		}
 		 	  }
 		 	}else{
-		 			if(this.laser < 5){
+		 			if(this.laser < 10){
 				 		if(++this.cnt%5 === 0){
 		 				this.laser++; this.hud.laser = this.laser; this.hud.updateStr();
 		 			}
@@ -91,14 +107,18 @@ function Ship(){
 		 		}
 		 	  }
 		 	}else{
-		 			if(this.shield < 5){
+		 			if(this.shield < 10){
 				 		if(++this.cnt%5 === 0){
 		 				this.shield++; this.hud.shield = this.shield; this.hud.updateStr();
 		 			}
 		 		}
 		 	}
 
-		 
+			if(this.b_spec)
+			if(++this.s_cnt_m%20===0){
+				this.s_cnt++;
+				console.log(this.s_cnt);
+			}
 	}
 
 	this.shootReset = function(){
@@ -107,6 +127,11 @@ function Ship(){
 	}
 
 	this.explode = function(){
+		 if(this.payload){
+		 	console.log(this.payload);
+		 	this.payload = null;
+		 	return;
+		 }
 		this.splode = true;
 		console.log('i explod');
 	}

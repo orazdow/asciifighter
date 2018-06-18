@@ -48,6 +48,28 @@ function createBullet(_x, _y, _routine, _spd) {
 			        }
 	   			break;
 
+	   			case 'dup_r':
+					Bullet.cnt++;
+					Bullet.x += Bullet.spd;
+				//	if(Bullet.cnt % 2 === 0)
+						Bullet.y -= 1;  
+	   			break;
+
+				case 'ddown_r':
+					Bullet.cnt++;
+					Bullet.x += Bullet.spd;
+					//if(Bullet.cnt % 2 === 0)
+						Bullet.y += 1;  
+	   			break;
+
+	   			case 'split_r':
+			        Bullet.cnt++; 
+			        Bullet.x += Bullet.spd;
+			        if(Bullet.cnt === 4 ){
+			          Bullet.split_r(); 
+			        }
+	   			break;
+
 	   			case 'bomb':
 	   				Bullet.cnt++;
 	   				Bullet.x += 2;  //3
@@ -87,10 +109,13 @@ function createBullet(_x, _y, _routine, _spd) {
 	    } else {return false;}
 	   },
 	   split : function () { 
-	    bullets.push(createBullet(Bullet.x+3, Bullet.y, 'dup'));
-	    bullets.push(createBullet(Bullet.x+3, Bullet.y, 'ddown'));
+	    bullets.push(createBullet(Bullet.x+3, Bullet.y, 'dup', Bullet.spd, Bullet.char));
+	    bullets.push(createBullet(Bullet.x+3, Bullet.y, 'ddown', Bullet.spd, Bullet.char));
+	   },
+	   split_r : function () {  
+	    bullets.push(createBullet(Bullet.x+3, Bullet.y, 'dup_r', Bullet.spd, Bullet.char));
+	    bullets.push(createBullet(Bullet.x+3, Bullet.y, 'ddown_r',Bullet.spd, Bullet.char));
 	   }
-
 	};
 
 		return Bullet;

@@ -20,6 +20,8 @@ var bchars_d = ['','[','[',
 var bchars_e = ['','<','>',
 				'<','>','',
 				'','<','>'];
+
+var b_spec = ['(',']','[','S',']','[',')','']; //(][s][)
 /*
 moveCb:
 straight = 0, up = 1, down = 2, stop = 3, shup = 4, shdown = 5
